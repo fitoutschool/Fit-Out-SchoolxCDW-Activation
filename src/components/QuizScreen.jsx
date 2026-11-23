@@ -4,56 +4,117 @@ import { ArrowRight, CheckCircle2, ChevronLeft } from "lucide-react";
 
 const MotionDiv = motion.div;
 
+const OPTION_LABELS = {
+  en: ["A", "B", "C", "D"],
+  ar: ["أ", "ب", "ج", "د"],
+};
+
 const QUESTIONS = [
   {
-    question: "What should happen before applying a finishing material?",
-    options: [
-      "Prepare and inspect the surface",
-      "Install furniture",
-      "Apply the final coat immediately",
-      "Ignore surface conditions",
-    ],
+    en: {
+      question: "What should happen before applying a finishing material?",
+      options: [
+        "Prepare and inspect the surface",
+        "Install furniture",
+        "Apply the final coat immediately",
+        "Ignore surface conditions",
+      ],
+    },
+    ar: {
+      question: "ما الذي يجب فعله قبل تطبيق مواد التشطيب؟",
+      options: [
+        "تجهيز السطح وفحصه",
+        "تركيب الأثاث",
+        "تطبيق الطبقة النهائية فورًا",
+        "تجاهل حالة السطح",
+      ],
+    },
     correct: 0,
   },
   {
-    question: "What is the main purpose of a site measurement?",
-    options: [
-      "To choose wall colors",
-      "To ensure accurate execution",
-      "To estimate social media reach",
-      "To select furniture styles",
-    ],
+    en: {
+      question: "What is the main purpose of a site measurement?",
+      options: [
+        "To choose wall colors",
+        "To ensure accurate execution",
+        "To estimate social media reach",
+        "To select furniture styles",
+      ],
+    },
+    ar: {
+      question: "ما الغرض الرئيسي من أخذ القياسات في الموقع؟",
+      options: [
+        "اختيار ألوان الجدران",
+        "ضمان دقة التنفيذ",
+        "تقدير الوصول إلى وسائل التواصل الاجتماعي",
+        "اختيار أنماط الأثاث",
+      ],
+    },
     correct: 1,
   },
   {
-    question: "Which drawing helps communicate dimensions and layout?",
-    options: [
-      "Moodboard",
-      "Perspective render",
-      "Technical plan",
-      "Color palette",
-    ],
+    en: {
+      question: "Which drawing helps communicate dimensions and layout?",
+      options: [
+        "Moodboard",
+        "Perspective render",
+        "Technical plan",
+        "Color palette",
+      ],
+    },
+    ar: {
+      question: "أيّ الرسومات تساعد على توضيح الأبعاد والتوزيع؟",
+      options: [
+        "لوحة الإلهام",
+        "منظور ثلاثي الأبعاد",
+        "مخطط فني",
+        "لوحة الألوان",
+      ],
+    },
     correct: 2,
   },
   {
-    question: "What is important before installing floor tiles?",
-    options: [
-      "Check substrate preparation and levels",
-      "Paint the ceiling",
-      "Install curtains",
-      "Choose decorative accessories",
-    ],
+    en: {
+      question: "What is important before installing floor tiles?",
+      options: [
+        "Check substrate preparation and levels",
+        "Paint the ceiling",
+        "Install curtains",
+        "Choose decorative accessories",
+      ],
+    },
+    ar: {
+      question: "ما الأمر المهم قبل تركيب بلاط الأرضيات؟",
+      options: [
+        "التحقق من تجهيز الأرضية واستوائها",
+        "طلاء السقف",
+        "تركيب الستائر",
+        "اختيار الإكسسوارات الزخرفية",
+      ],
+    },
     correct: 0,
   },
   {
-    question:
-      "A design looks perfect on screen, but the site conditions differ. What is the best approach?",
-    options: [
-      "Ignore the site conditions",
-      "Make changes without coordination",
-      "Review, coordinate, and adapt the execution",
-      "Stop communicating with the team",
-    ],
+    en: {
+      question:
+        "A design looks perfect on screen, but the site conditions differ. What is the best approach?",
+      options: [
+        "Ignore the site conditions",
+        "Make changes without coordination",
+        "Review, coordinate, and adapt the execution",
+        "Stop communicating with the team",
+      ],
+    },
+    ar: {
+      question:
+        "يبدو التصميم مثاليًا على الشاشة، لكن ظروف الموقع مختلفة. ما أفضل تصرف؟",
+      options: [
+        "تجاهل ظروف الموقع",
+        "إجراء تغييرات دون تنسيق",
+        "مراجعة التنفيذ والتنسيق وتكييفه مع ظروف الموقع",
+        "التوقف عن التواصل مع الفريق",
+      ],
+    },
     correct: 2,
   },
 ];
@@ -61,7 +122,9 @@ const QUESTIONS = [
 export default function QuizScreen({ onComplete, loading }) {
   const [index, setIndex] = useState(0);
   const [answers, setAnswers] = useState([]);
+  const [language, setLanguage] = useState("en");
   const question = QUESTIONS[index];
+  const localizedQuestion = question[language];
   const selected = answers[index];
 
   function choose(optionIndex) {
@@ -94,22 +157,44 @@ export default function QuizScreen({ onComplete, loading }) {
     >
       <div className="step-label">02 / THE FIT-OUT CHALLENGE</div>
       <div className="quiz-progress">
-        <span>QUESTION {String(index + 1).padStart(2, "0")} / 05</span>
+        <span dir={language === "ar" ? "rtl" : "ltr"}>
+          {language === "ar" ? "السؤال" : "QUESTION"}{" "}
+          {String(index + 1).padStart(2, "0")} / 05
+        </span>
+        <div className="quiz-language-toggle" role="group" aria-label="Question language">
+          <button
+            type="button"
+            aria-pressed={language === "en"}
+            onClick={() => setLanguage("en")}
+          >
+            EN
+          </button>
+          <button
+            type="button"
+            aria-pressed={language === "ar"}
+            onClick={() => setLanguage("ar")}
+          >
+            عربي
+          </button>
+        </div>
         <span>{Math.round(((index + 1) / 5) * 100)}%</span>
       </div>
       <div className="progress-track">
         <div style={{ width: `${((index + 1) / 5) * 100}%` }} />
       </div>
-      <h2 className="question-title">{question.question}</h2>
+      <h2 className="question-title" dir={language === "ar" ? "rtl" : "ltr"}>
+        {localizedQuestion.question}
+      </h2>
       <div className="answers">
-        {question.options.map((option, optionIndex) => (
+        {localizedQuestion.options.map((option, optionIndex) => (
           <button
             key={option}
             className={`answer ${selected === optionIndex ? "selected" : ""}`}
+            dir={language === "ar" ? "rtl" : "ltr"}
             onClick={() => choose(optionIndex)}
           >
             <span className="answer-letter">
-              {String.fromCharCode(65 + optionIndex)}
+              {OPTION_LABELS[language][optionIndex]}
             </span>
             {option}
             {selected === optionIndex && <CheckCircle2 size={19} />}
