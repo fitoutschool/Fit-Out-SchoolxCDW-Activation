@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Gift, RotateCw, Sparkles } from "lucide-react";
+import { Gift, Sparkles } from "lucide-react";
 
 const MotionDiv = motion.div;
 const MotionWheel = motion.div;
@@ -27,7 +27,7 @@ export default function SpinWheel({ onSpin, loading, onComplete }) {
     ? "SECURING YOUR REWARD..."
     : spinning
       ? "YOUR REWARD IS ON ITS WAY..."
-      : "ONE SPIN. FIVE WAYS TO WIN.";
+      : "CLICK FS TO SPIN.";
 
   async function handleSpin() {
     if (spinning || loading) return;
@@ -82,11 +82,17 @@ export default function SpinWheel({ onSpin, loading, onComplete }) {
               {label}
             </span>
           ))}
-          <div className="wheel-center">
-            <Sparkles size={13} />
-            <strong>FS</strong>
-          </div>
         </MotionWheel>
+        <button
+          type="button"
+          className="wheel-center-button"
+          onClick={handleSpin}
+          disabled={spinning || loading}
+          aria-label="Spin the wheel to reveal your reward"
+        >
+          <Sparkles size={13} />
+          <strong>FS</strong>
+        </button>
       </div>
 
       <div className="spin-status" role="status" aria-live="polite">
@@ -112,21 +118,6 @@ export default function SpinWheel({ onSpin, loading, onComplete }) {
         ))}
       </div>
 
-      <button
-        className="primary-btn spin-btn"
-        onClick={handleSpin}
-        disabled={spinning || loading}
-      >
-        <RotateCw
-          className={spinning ? "spin-button-icon active" : "spin-button-icon"}
-          size={18}
-        />
-        {loading
-          ? "PREPARING YOUR REWARD..."
-          : spinning
-            ? "SPINNING..."
-            : "SPIN TO REVEAL YOUR REWARD"}
-      </button>
       <p className="spin-secure-note">Reward selected securely by our server</p>
     </MotionDiv>
   );
